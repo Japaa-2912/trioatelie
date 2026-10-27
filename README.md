@@ -85,6 +85,8 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
 - `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY`: estão em
   **Project Settings → API** no Supabase. Use a chave `anon`/`publishable`.
+  A integração Supabase + Vercel pode criar a chave com o nome
+  `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`; o app aceita os dois nomes.
 - `NEXT_PUBLIC_SITE_URL`: URL canônica da loja. Em produção, use o domínio final
   (ex.: `https://lacoluz.com.br`). Ela aparece no sitemap, no Open Graph e nos
   links enviados ao WhatsApp.
