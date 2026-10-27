@@ -1,0 +1,12 @@
+# Normaliza textos para LF no repositório, independentemente do sistema.
+* text=auto eol=lf
+
+# Binários não devem ser alterados pelo Git.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
