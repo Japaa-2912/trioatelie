@@ -30,7 +30,26 @@ begin
 end;
 $$;
 
+-- -----------------------------------------------------------------------------
+-- profiles
+-- -----------------------------------------------------------------------------
+create table if not exists public.profiles (
+  id uuid primary key references auth.users (id) on delete cascade,
+  full_name text,
+  role public.app_role not null default 'viewer',
+  created_at timestamptz not null default timezone('utc', now()),
+  updated_at timestamptz not null default timezone('utc', now())
+);
+
+create index if not exists profiles_role_idx on public.profiles (role);
+
+drop trigger if exists profiles_set_updated_at on public.profiles;
+create trigger profiles_set_updated_at
+before update on public.profiles
+for each row execute function public.set_updated_at();
+
 -- Verifica se o usuário autenticado é administrador.
+-- Criada depois de profiles: o Postgres valida o corpo da função na criação.
 -- SECURITY DEFINER evita recursão nas políticas da tabela profiles.
 create or replace function public.is_admin()
 returns boolean
@@ -49,24 +68,6 @@ $$;
 
 revoke all on function public.is_admin() from public;
 grant execute on function public.is_admin() to authenticated;
-
--- -----------------------------------------------------------------------------
--- profiles
--- -----------------------------------------------------------------------------
-create table if not exists public.profiles (
-  id uuid primary key references auth.users (id) on delete cascade,
-  full_name text,
-  role public.app_role not null default 'viewer',
-  created_at timestamptz not null default timezone('utc', now()),
-  updated_at timestamptz not null default timezone('utc', now())
-);
-
-create index if not exists profiles_role_idx on public.profiles (role);
-
-drop trigger if exists profiles_set_updated_at on public.profiles;
-create trigger profiles_set_updated_at
-before update on public.profiles
-for each row execute function public.set_updated_at();
 
 -- Cria automaticamente um perfil (sem privilégios) para novos usuários.
 create or replace function public.handle_new_user()
