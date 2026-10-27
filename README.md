@@ -254,6 +254,39 @@ pelo painel.
 - A política de privacidade é editável no painel e explica o uso dos dados no
   encaminhamento ao WhatsApp.
 
+### Proteção do painel
+
+- O `proxy` faz apenas uma verificação otimista de sessão. A autorização real
+  acontece no servidor: o layout do painel chama `requireAdmin()` e todas as
+  Server Actions de escrita chamam `assertAdmin()`.
+- Contas autenticadas sem `role = 'admin'` são desconectadas no login e não
+  conseguem ler nem gravar dados administrativos.
+- O cadastro público deve permanecer desativado no Supabase. Novas contas só
+  devem ser criadas manualmente em **Authentication → Users**.
+- As URLs de redirecionamento do Auth devem ser exatas (produção e localhost),
+  sem curingas.
+- Recomenda-se ativar **Leaked password protection** no Supabase e usar senha
+  longa e exclusiva para a conta da proprietária.
+- Ative a autenticação em dois fatores nas contas do Supabase, da Vercel e do
+  GitHub. O maior risco operacional é o acesso às plataformas, não o código.
+- O rate limit de login e recuperação de senha é o nativo do Supabase Auth.
+
+### Cabeçalhos HTTP
+
+A aplicação envia `X-Content-Type-Options`, `X-Frame-Options`,
+`Referrer-Policy`, `Permissions-Policy` e uma CSP parcial com
+`frame-ancestors 'none'`, `base-uri 'self'`, `object-src 'none'` e
+`form-action 'self'`. Rotas `/admin` e `/auth` também recebem
+`Cache-Control: no-store` e `X-Robots-Tag: noindex, nofollow`.
+
+### O que ainda pode ser reforçado
+
+- Uma CSP estrita com nonce para scripts (hoje a CSP é parcial para não quebrar
+  os scripts inline do Next.js).
+- CAPTCHA no login (exige enviar o token do CAPTCHA junto ao Supabase Auth).
+- Limite de tentativas próprio por IP (hoje depende do rate limit do Supabase).
+- Proteção de deployments de preview na Vercel, se forem públicos.
+
 ## Estrutura do projeto
 
 ```text

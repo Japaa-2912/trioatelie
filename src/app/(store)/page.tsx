@@ -13,6 +13,7 @@ import { CustomizationSection } from "@/components/store/customization-section";
 import { HowItWorksSection } from "@/components/store/how-it-works";
 import { HomeCtaSection } from "@/components/store/home-cta";
 import { buttonClasses } from "@/components/ui/button";
+import { serializeJsonLd } from "@/lib/utils";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getStoreSettings();
@@ -77,7 +78,7 @@ export default async function HomePage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
       <HeroSection settings={settings} />
       <TrustStrip />

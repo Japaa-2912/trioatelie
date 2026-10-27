@@ -20,7 +20,7 @@ import { ProductPurchasePanel } from "@/components/store/product-purchase-panel"
 import { ProductCard } from "@/components/store/product-card";
 import { Badge } from "@/components/ui/badge";
 import { Alert } from "@/components/ui/alert";
-import { truncate } from "@/lib/utils";
+import { truncate, serializeJsonLd } from "@/lib/utils";
 
 export async function generateMetadata({
   params,
@@ -146,7 +146,7 @@ export default async function ProductPage({
     <div className="container-page py-8 md:py-12">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
 
       <nav aria-label="Você está aqui" className="flex flex-wrap items-center gap-2 text-[0.68rem] text-muted">

@@ -5,6 +5,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+/**
+ * Serializa JSON-LD para uso dentro de <script>. O escape de "<" impede que
+ * um texto editável no painel feche a tag e injete HTML.
+ */
+export function serializeJsonLd(value: unknown): string {
+  return JSON.stringify(value).replace(/</g, "\\u003c");
+}
+
 export function slugify(value: string): string {
   return value
     .normalize("NFD")
